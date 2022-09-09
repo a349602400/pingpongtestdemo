@@ -11,7 +11,7 @@ import java.security.PublicKey;
 @Setter
 @ToString
 public class MessageModel {
-    private  String url;
+    private  String path;
     private  String hostName;
     private  String message;
     private long timeStamp;

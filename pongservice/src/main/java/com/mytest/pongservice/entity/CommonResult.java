@@ -2,18 +2,13 @@ package com.mytest.pongservice.entity;
 
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
-public class CommonResult<T> {
-    private Integer code;
+public class CommonResult {
     private String message;
-    private T data;
-    private String state;
-    private String url;
+    private String path;
     private String fileName;
-    private String hostName;
     private long timeStamp;
 }

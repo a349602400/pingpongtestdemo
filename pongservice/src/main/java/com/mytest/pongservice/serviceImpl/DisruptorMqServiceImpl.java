@@ -25,28 +25,23 @@ public class DisruptorMqServiceImpl implements DisruptorMqService {
     @Override
     public boolean fileRead(CommonResult commonResult) {
         if(null==commonResult) return  false;
-        log.info("生产消息: {}",commonResult.toString());
-        String url = commonResult.getUrl();
-        //获取下一个Event槽的下标
+        log.info("Production news: {}",commonResult.toString());
+        //Get the subscript of the next event slot
         long sequence = messageModelRingBuffer.next();
         try {
-            //给Event填充数据
+            //Fill event with data
             MessageModel event = messageModelRingBuffer.get(sequence);
-            //event.setMessage(message);
-            event.setUrl(commonResult.getUrl());
-            event.setHostName(commonResult.getHostName());
+            event.setPath(commonResult.getPath());
             event.setTimeStamp(commonResult.getTimeStamp());
-            log.info("往消息队列中添加消息：{}", event);
+            log.info("Add message to message queue...");
         } catch (Exception e) {
             log.error("failed to add event to messageModelRingBuffer for : e = {},{}",e,e.getMessage());
             return  false;
         } finally {
-            //发布Event，激活观察者去消费，将sequence传递给该消费者
-            //注意最后的publish方法必须放在finally中以确保必须得到调用；如果某个请求的sequence未被提交将会堵塞后续的发布操作或者其他的producer
-            messageModelRingBuffer.publish(sequence);
+            //Issue an event, activate the observer to consume, and pass the sequence to the consumer
+            //If a requested sequence is not submitted, subsequent publishing operations or other producers will be blocked
+             messageModelRingBuffer.publish(sequence);
         }
-
-
         return true;
     }
 }

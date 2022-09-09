@@ -22,10 +22,9 @@ class PongserviceApplicationTests  {
     @Test
     void fileRead(){
         CommonResult commonResult=new CommonResult();
-        commonResult.setMessage("你好");
-        commonResult.setHostName("TEST-1");
-        commonResult.setUrl("D:\\test\\1662462808014.txt");
+        commonResult.setPath("D:\\test\\1662462808014.txt");
         commonResult.setTimeStamp(1662462808014L);
+        commonResult.setFileName("1662462808014.txt");
         disruptorMqService.fileRead(commonResult);
     }
 

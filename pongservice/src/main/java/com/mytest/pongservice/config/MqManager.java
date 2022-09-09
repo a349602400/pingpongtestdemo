@@ -26,22 +26,22 @@ public class MqManager {
                 Executors.defaultThreadFactory(),
                 new ThreadPoolExecutor.DiscardOldestPolicy());
 
-        //指定事件工厂
+        //Specify event factory
         DisruptorMqEventFactory factory = new DisruptorMqEventFactory();
 
-        //指定RingBuffer字节大小，必须为2的N次方（能将求模运算转为位运算提高效率），否则将影响效率
+        //The specified ringbuffer byte size must be the nth power of 2 (modular operation can be converted to bit operation to improve efficiency), otherwise efficiency will be affected
         int bufferSize = 1024 * 256;
 
-        //单线程模式，获取额外的性能
+        //Single thread mode for extra performance
         Disruptor<MessageModel> disruptor = new Disruptor<>(factory, bufferSize, Executors.defaultThreadFactory(), ProducerType.SINGLE, new BlockingWaitStrategy());
 
-        //设置事件业务处理器---消费者
+        //Set event business processor consumer
         disruptor.handleEventsWith(new DisruptorMqEventHandler());
 
-        // 启动disruptor线程
+        // Start the disruptor thread
         disruptor.start();
 
-        //获取RingBuffer环，用于接取生产者生产的事件
+        //Obtain ringbuffer ring, which is used to receive events produced by the producer
         RingBuffer<MessageModel> ringBuffer = disruptor.getRingBuffer();
 
         return ringBuffer;

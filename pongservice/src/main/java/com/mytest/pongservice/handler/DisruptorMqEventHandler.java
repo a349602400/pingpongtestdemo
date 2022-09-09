@@ -16,24 +16,25 @@ public class DisruptorMqEventHandler implements EventHandler<MessageModel> {
     @Override
     public void onEvent(MessageModel event, long sequence, boolean endOfBatch) {
         try {
-            //这里停止1000ms是为了确定消费消息是异步的
-            //Thread.sleep(1000);
-            log.info("消费者处理消息开始");
+            //log.info("Consumer processing message started");
             if (event != null) {
-                log.info("消费者消费的信息是：{}",event);
+                log.info("Consumer consumption information is：{}",event);
                 try {
-                    String str =  new String(readAllBytes(Paths.get(event.getUrl())));
+                    String str =  new String(readAllBytes(Paths.get(event.getPath())));
                     long epochMilliNOW  = Instant.now().toEpochMilli();
                     long epochMilliNOWReduce = epochMilliNOW - event.getTimeStamp();
-                    System.out.println("数据来自："+event.getHostName()+";文件名为："+event.getUrl()
-                            +"；服务端读取文件内容为："+str +"时间戳之差为:"+epochMilliNOWReduce);
+                    System.out.println("File name："+event.getPath()
+                            +"；The content of the file read by the server is："+str
+                            +"The difference between time stamps is:"+epochMilliNOWReduce);
+                    log.info("The file name and content read are：{}",event.getPath()+"--"+str);
+                    log.info("The time difference from generation to reading is:{}",epochMilliNOWReduce);
                 } catch (IOException e) {
-                    System.out.println("读取错误");
+                    System.out.println("Read error");
                 }
             }
         } catch (Exception e) {
-            log.info("消费者处理消息失败");
+            log.info("Consumer failed to process message");
         }
-        log.info("消费者处理消息结束");
+        log.info("End of consumer processing message");
     }
 }

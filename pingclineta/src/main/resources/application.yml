@@ -9,7 +9,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
-    registry-fetch-interval-seconds:  10 #为了解决脏读问题时间越短脏读越少
+    registry-fetch-interval-seconds:  10
   instance:
     hostname: localhost
     instance-id: ${eureka.instance.hostname}:${spring.application.name}:${server.port}
